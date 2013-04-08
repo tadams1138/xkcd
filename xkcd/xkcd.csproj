@@ -147,7 +147,7 @@
     <Content Include="Assets\DarkGray.png" />
     <Content Include="Assets\WideLogo.png" />
     <Content Include="comics.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Page Include="MonthsPage.xaml">
       <Generator>MSBuild:Compile</Generator>

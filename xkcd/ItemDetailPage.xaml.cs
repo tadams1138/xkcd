@@ -1,26 +1,17 @@
-﻿using xkcd.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using xkcd.Common;
+using xkcd.DataModel;
 
 namespace xkcd
 {
-    public sealed partial class ItemDetailPage : xkcd.Common.LayoutAwarePage
+    public sealed partial class ItemDetailPage
     {
         public ItemDetailPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
@@ -31,9 +22,9 @@ namespace xkcd
             }
 
             var comic = ComicDataSource.GetItem((int)navigationParameter);
-            this.DefaultViewModel["Group"] = ComicDataSource.GetComics(comic.Date.Year, comic.Date.Month);
-            this.DefaultViewModel["Items"] = ComicDataSource.AllItems;
-            this.flipView.SelectedItem = comic;
+            DefaultViewModel["Group"] = ComicDataSource.GetComics(comic.Date.Year, comic.Date.Month);
+            DefaultViewModel["Items"] = ComicDataSource.AllItems;
+            FlipView.SelectedItem = comic;
         }
 
         /// <summary>
@@ -44,14 +35,14 @@ namespace xkcd
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
         {
-            var currentComic = (Comic)this.flipView.SelectedItem;
+            var currentComic = (Comic)FlipView.SelectedItem;
             pageState["SelectedItem"] = currentComic.Number;
         }
 
         private async void ImageTapped(object sender, TappedRoutedEventArgs e)
         {
-            var currentComic = (Comic)this.flipView.SelectedItem;
-            MessageDialog dialog = new MessageDialog(currentComic.AltText);
+            var currentComic = (Comic)FlipView.SelectedItem;
+            var dialog = new MessageDialog(currentComic.AltText);
             await dialog.ShowAsync();
         }
     }

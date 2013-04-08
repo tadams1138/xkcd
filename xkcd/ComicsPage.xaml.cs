@@ -1,46 +1,36 @@
-﻿using xkcd.Data;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-namespace xkcd
+﻿namespace xkcd
 {
-    public sealed partial class ComicsPage : xkcd.Common.LayoutAwarePage
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using Windows.UI.Xaml.Controls;
+    using DataModel;
+
+    public sealed partial class ComicsPage
     {
-        private ObservableCollection<Comic> comics = new ObservableCollection<Comic>();
-        private DateTime month;
-        bool handleDataEvent;
+        private readonly ObservableCollection<Comic> _comics = new ObservableCollection<Comic>();
+        private DateTime _month;
+        bool _handleDataEvent;
 
         public ComicsPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            this.month = DateTime.Parse((string)navigationParameter);
+            _month = DateTime.Parse((string)navigationParameter);
 
-            if (!handleDataEvent)
+            if (!_handleDataEvent)
             {
-                ComicDataSource.CollectionChanged += this.ComicDataSource_CollectionChanged;
-                this.handleDataEvent = true;
+                ComicDataSource.CollectionChanged += ComicDataSource_CollectionChanged;
+                _handleDataEvent = true;
             }
 
             RefreshCollection();
 
-            this.DefaultViewModel["Comics"] = comics;
-            this.DefaultViewModel["Month"] = this.month.ToString("MMMM yyyy");
+            DefaultViewModel["Comics"] = _comics;
+            DefaultViewModel["Month"] = _month.ToString("MMMM yyyy");
         }
 
         private void ComicDataSource_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -50,18 +40,18 @@ namespace xkcd
 
         private void RefreshCollection()
         {
-            var newCollection = ComicDataSource.GetComics(this.month.Year, this.month.Month);
-            this.comics.Clear();
+            var newCollection = ComicDataSource.GetComics(_month.Year, _month.Month);
+            _comics.Clear();
             foreach (Comic c in newCollection)
             {
-                this.comics.Add(c);
+                _comics.Add(c);
             }
         }
 
         void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var comic = (Comic)e.ClickedItem;
-            this.Frame.Navigate(typeof(ItemDetailPage), comic.Number);
+            Frame.Navigate(typeof(ItemDetailPage), comic.Number);
         }
     }
 }

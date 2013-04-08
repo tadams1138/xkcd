@@ -1,10 +1,6 @@
-﻿namespace xkcd.Data
+﻿namespace xkcd.DataModel
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Runtime.Serialization;
     using Windows.Data.Json;
     using Windows.UI.Xaml.Media;
@@ -12,26 +8,26 @@
 
     [DataContract]
     [Windows.Foundation.Metadata.WebHostHidden]
-    public class Comic : xkcd.Common.BindableBase
+    public class Comic : Common.BindableBase
     {
-        private static Uri _baseUri = new Uri("ms-appx:///");
+        private static readonly Uri BaseUri = new Uri("ms-appx:///");
 
         public Comic(int number, string title, DateTime date, string imagePath, string altText)
         {
-            this._number = number;
-            this._title = title;
-            this._date = date;
-            this._altText = altText;
-            this._imagePath = imagePath;
+            _number = number;
+            _title = title;
+            _date = date;
+            _altText = altText;
+            _imagePath = imagePath;
         }
 
-        private int _number = 0;
+        private int _number;
 
         [DataMember]
         public int Number
         {
-            get { return this._number; }
-            set { this.SetProperty(ref this._number, value); }
+            get { return _number; }
+            set { SetProperty(ref _number, value); }
         }
 
         private string _title = string.Empty;
@@ -39,8 +35,8 @@
         [DataMember]
         public string Title
         {
-            get { return this._title; }
-            set { this.SetProperty(ref this._title, value); }
+            get { return _title; }
+            set { SetProperty(ref _title, value); }
         }
 
         private DateTime _date = DateTime.MinValue;
@@ -48,8 +44,8 @@
         [DataMember]
         public DateTime Date
         {
-            get { return this._date; }
-            set { this.SetProperty(ref this._date, value); }
+            get { return _date; }
+            set { SetProperty(ref _date, value); }
         }
 
         private string _altText = string.Empty;
@@ -57,44 +53,41 @@
         [DataMember]
         public string AltText
         {
-            get { return this._altText; }
-            set { this.SetProperty(ref this._altText, value); }
+            get { return _altText; }
+            set { SetProperty(ref _altText, value); }
         }
 
-        private ImageSource _image = null;
+        private ImageSource _image;
 
         [DataMember]
-        private String _imagePath = null;
+        private String _imagePath;
 
         public ImageSource Image
         {
             get
             {
-                if (this._image == null && this._imagePath != null)
+                if (_image == null && _imagePath != null)
                 {
-                    this._image = new BitmapImage(new Uri(Comic._baseUri, this._imagePath));
+                    _image = new BitmapImage(new Uri(BaseUri, _imagePath));
                 }
-                return this._image;
+                return _image;
             }
 
             set
             {
-                this._imagePath = null;
-                this.SetProperty(ref this._image, value);
+                _imagePath = null;
+                SetProperty(ref _image, value);
             }
         }
 
-        public string ShortDateString
+        public string Subtitle
         {
-            get
-            {
-                return this.Date.ToString("d");
-            }
+            get { return string.Format("#{0} {1}", Number, Date.ToString("d")); }
         }
         
         public override string ToString()
         {
-            return this.Title;
+            return Title;
         }
 
         public static Comic FromJson(string json)

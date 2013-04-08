@@ -1,51 +1,41 @@
 ﻿namespace xkcd
 {
-    using xkcd.Data;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.IO;
-    using System.Linq;
-    using Windows.Foundation;
-    using Windows.Foundation.Collections;
-    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Controls.Primitives;
-    using Windows.UI.Xaml.Data;
-    using Windows.UI.Xaml.Input;
-    using Windows.UI.Xaml.Media;
-    using Windows.UI.Xaml.Navigation;
+    using DataModel;
 
-    public sealed partial class YearsPage : xkcd.Common.LayoutAwarePage
+    public sealed partial class YearsPage
     {
-        private ObservableCollection<int> years = new ObservableCollection<int>();
-        bool handleDataEvent;
+        private readonly ObservableCollection<int> _years = new ObservableCollection<int>();
+        bool _handleDataEvent;
 
         public YearsPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            if (!handleDataEvent)
+            if (!_handleDataEvent)
             {
-                ComicDataSource.CollectionChanged += this.ComicDataSource_CollectionChanged;
-                this.handleDataEvent = true;
+                ComicDataSource.CollectionChanged += ComicDataSource_CollectionChanged;
+                _handleDataEvent = true;
             }
 
             RefreshYearsCollection();
 
-            this.DefaultViewModel["Years"] = years;
+            DefaultViewModel["Years"] = _years;
         }
 
         private void RefreshYearsCollection()
         {
             var sampleDataGroups = ComicDataSource.GetYears();
-            this.years.Clear();
+            _years.Clear();
             foreach (int year in sampleDataGroups)
             {
-                this.years.Add(year);
+                _years.Add(year);
             }
         }
 
@@ -56,8 +46,8 @@
                 
         void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            int year = (int)e.ClickedItem;
-            this.Frame.Navigate(typeof(MonthsPage), year);
+            var year = (int)e.ClickedItem;
+            Frame.Navigate(typeof(MonthsPage), year);
         }
     }
 }

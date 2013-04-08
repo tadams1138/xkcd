@@ -1,26 +1,20 @@
-﻿namespace xkcd.Data
-{
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Net.Http;
-    using System.Runtime.CompilerServices;
-    using System.Runtime.Serialization;
-    using System.Threading.Tasks;
-    using System.Xml;
-    using Windows.ApplicationModel;
-    using Windows.ApplicationModel.Resources.Core;
-    using Windows.Data.Xml.Dom;
-    using Windows.Foundation;
-    using Windows.Foundation.Collections;
-    using Windows.Storage;
-    using Windows.UI.Xaml.Data;
-    using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using System.Xml;
+using Windows.ApplicationModel;
+using Windows.Data.Xml.Dom;
+using Windows.Storage;
 
+namespace xkcd.DataModel
+{
     public sealed class ComicDataSource
     {
         private const string CurrentComicUrl = "http://xkcd.com/info.0.json";
@@ -67,7 +61,7 @@
             bool fileExists = true;
             try
             {
-                inFile = await this.storageFolder.GetFileAsync(ComicsDataFile);
+                inFile = await storageFolder.GetFileAsync(ComicsDataFile);
             }
             catch (FileNotFoundException)
             {
