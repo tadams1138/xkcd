@@ -1,90 +1,68 @@
 ﻿namespace xkcd.DataModel
 {
     using System;
+    using System.IO;
     using System.Runtime.Serialization;
-    using Windows.Data.Json;
-    using Windows.UI.Xaml.Media;
-    using Windows.UI.Xaml.Media.Imaging;
+    using System.Runtime.Serialization.Json;
+    using System.Text;
 
     [DataContract]
-    [Windows.Foundation.Metadata.WebHostHidden]
-    public class Comic : Common.BindableBase
+    public class Comic
     {
-        private static readonly Uri BaseUri = new Uri("ms-appx:///");
+        [DataMember(Name = "num")]
+        private readonly int _number;
 
-        public Comic(int number, string title, DateTime date, string imagePath, string altText)
-        {
-            _number = number;
-            _title = title;
-            _date = date;
-            _altText = altText;
-            _imagePath = imagePath;
-        }
+        [DataMember(Name = "title")]
+        private readonly string _title;
 
-        private int _number;
+        [DataMember(Name = "alt")]
+        private readonly string _altText;
 
-        [DataMember]
+        [DataMember(Name = "img")]
+        private readonly string _imgUrl;
+
+        [DataMember(Name = "day")]
+        private readonly string _day;
+
+        [DataMember(Name = "month")]
+        private readonly string _month;
+
+        [DataMember(Name = "year")]
+        private readonly string _year;
+
+        [DataMember(Name = "date")]
+        private DateTime _date;
+
         public int Number
         {
             get { return _number; }
-            set { SetProperty(ref _number, value); }
         }
 
-        private string _title = string.Empty;
-
-        [DataMember]
         public string Title
         {
             get { return _title; }
-            set { SetProperty(ref _title, value); }
         }
 
-        private DateTime _date = DateTime.MinValue;
-
-        [DataMember]
         public DateTime Date
         {
             get { return _date; }
-            set { SetProperty(ref _date, value); }
         }
 
-        private string _altText = string.Empty;
-
-        [DataMember]
         public string AltText
         {
             get { return _altText; }
-            set { SetProperty(ref _altText, value); }
         }
 
-        private ImageSource _image;
-
-        [DataMember]
-        private String _imagePath;
-
-        public ImageSource Image
+        public string ImageUrl
         {
-            get
-            {
-                if (_image == null && _imagePath != null)
-                {
-                    _image = new BitmapImage(new Uri(BaseUri, _imagePath));
-                }
-                return _image;
-            }
-
-            set
-            {
-                _imagePath = null;
-                SetProperty(ref _image, value);
-            }
+            get { return _imgUrl; }
         }
 
         public string Subtitle
         {
             get { return string.Format("#{0} {1}", Number, Date.ToString("d")); }
         }
-        
+
         public override string ToString()
         {
             return Title;
@@ -92,30 +70,24 @@
 
         public static Comic FromJson(string json)
         {
-            JsonValue jsonValue = JsonValue.Parse(json);
-            DateTime date = GetDate(jsonValue);
-            string title = jsonValue.GetObject().GetNamedString("title");
-            string altText = jsonValue.GetObject().GetNamedString("alt");
-            string imageUrl = jsonValue.GetObject().GetNamedString("img");
-            int number = GetNumber(jsonValue);
-            return new Comic(number, title, date, imageUrl, altText);
+            using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(json)))
+            {
+                var serializer =
+                    new DataContractJsonSerializer(typeof (Comic));
+
+                var comic = (Comic)serializer.ReadObject(ms);
+                comic.SetDate();
+                
+                return comic;
+            }
         }
 
-        private static int GetNumber(JsonValue jsonValue)
+        private void SetDate()
         {
-            double numberDouble = jsonValue.GetObject().GetNamedNumber("num");
-            return Convert.ToInt32(numberDouble);
-        }
-
-        private static DateTime GetDate(JsonValue jsonValue)
-        {
-            string yearString = jsonValue.GetObject().GetNamedString("year");
-            int year = Int32.Parse(yearString);
-            string monthString = jsonValue.GetObject().GetNamedString("month");
-            int month = Int32.Parse(monthString);
-            string dayString = jsonValue.GetObject().GetNamedString("day");
-            int day = Int32.Parse(dayString);
-            return new DateTime(year, month, day);
+            int year = Int32.Parse(_year);
+            int month = Int32.Parse(_month);
+            int day = Int32.Parse(_day);
+            _date = new DateTime(year, month, day);
         }
     }
 }
