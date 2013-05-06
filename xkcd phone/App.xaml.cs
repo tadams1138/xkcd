@@ -1,17 +1,24 @@
-﻿using System;
+﻿using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+using System;
 using System.Diagnostics;
-using System.Resources;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
+using Windows.ApplicationModel;
+using Windows.Storage;
+using xkcd.DataModel;
 using xkcd_phone.Resources;
 
 namespace xkcd_phone
 {
     public partial class App : Application
     {
+        private const string ComicsDataFile = "comics.xml";
+        private readonly StorageFolder _storageFolder = ApplicationData.Current.LocalFolder;
+
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>
@@ -45,7 +52,7 @@ namespace xkcd_phone
                 //Application.Current.Host.Settings.EnableRedrawRegions = true;
 
                 // Enable non-production analysis visualization mode,
-                // which shows areas of a page that are handed off to GPU with a colored overlay.
+                // which shows areas of a page that are handed off GPU with a colored overlay.
                 //Application.Current.Host.Settings.EnableCacheVisualization = true;
 
                 // Prevent the screen from turning off while under the debugger by disabling
@@ -54,25 +61,28 @@ namespace xkcd_phone
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-
         }
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            UpdateComicDataSource();
         }
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
+            // Ensure that application state is restored appropriately
+            UpdateComicDataSource();
         }
 
         // Code to execute when the application is deactivated (sent to background)
         // This code will not execute when the application is closing
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
+            // Ensure that required application state is persisted here.
         }
 
         // Code to execute when the application is closing (eg, user hit Back)
@@ -218,6 +228,47 @@ namespace xkcd_phone
 
                 throw;
             }
+        }
+
+        private async void UpdateComicDataSource()
+        {
+            using (var readStream = await LoadComicsDataFile())
+            {
+                await ComicDataSource.UpdateComicData(readStream);
+            }
+
+            using (var saveStream = await GetSaveStream())
+            {
+                ComicDataSource.SaveComicData(saveStream);
+            }
+        }
+
+        private async Task<Stream> GetSaveStream()
+        {
+            var outFile = await _storageFolder.CreateFileAsync(ComicsDataFile, CreationCollisionOption.ReplaceExisting);
+            var saveStream = await outFile.OpenStreamForWriteAsync();
+            return saveStream;
+        }
+
+        private async Task<Stream> LoadComicsDataFile()
+        {
+            StorageFile inFile = null;
+            bool fileExists = true;
+            try
+            {
+                inFile = await _storageFolder.GetFileAsync(ComicsDataFile);
+            }
+            catch (FileNotFoundException)
+            {
+                fileExists = false;
+            }
+
+            if (!fileExists)
+            {
+                inFile = await Package.Current.InstalledLocation.GetFileAsync(ComicsDataFile);
+            }
+
+            return await inFile.OpenStreamForReadAsync();
         }
     }
 }

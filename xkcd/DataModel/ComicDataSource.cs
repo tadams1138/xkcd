@@ -21,7 +21,7 @@ namespace xkcd.DataModel
 
         private static readonly ComicDataSource _comicDataSource = new ComicDataSource();
 
-        private Collection<Comic> _allItems = new Collection<Comic>();
+        private readonly Collection<Comic> _allItems = new Collection<Comic>();
 
         public static Collection<Comic> AllItems
         {
@@ -41,7 +41,7 @@ namespace xkcd.DataModel
                    select d.Key.Year;
         }
 
-        internal static IEnumerable<DateTime> GetMonths(int year)
+        public static IEnumerable<DateTime> GetMonths(int year)
         {
             return from p in AllItems
                    where p.Date.Year == year

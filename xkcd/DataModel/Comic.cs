@@ -10,53 +10,28 @@
     public class Comic
     {
         [DataMember(Name = "num")]
-        private readonly int _number;
+        public readonly int Number;
 
         [DataMember(Name = "title")]
-        private readonly string _title;
+        public readonly string Title;
 
         [DataMember(Name = "alt")]
-        private readonly string _altText;
+        public readonly string AltText;
 
         [DataMember(Name = "img")]
-        private readonly string _imgUrl;
+        public readonly string ImageUrl;
 
         [DataMember(Name = "day")]
-        private readonly string _day;
+        public readonly string Day;
 
         [DataMember(Name = "month")]
-        private readonly string _month;
+        public readonly string Month;
 
         [DataMember(Name = "year")]
-        private readonly string _year;
+        public readonly string Year;
 
         [DataMember(Name = "date")]
-        private DateTime _date;
-
-        public int Number
-        {
-            get { return _number; }
-        }
-
-        public string Title
-        {
-            get { return _title; }
-        }
-
-        public DateTime Date
-        {
-            get { return _date; }
-        }
-
-        public string AltText
-        {
-            get { return _altText; }
-        }
-
-        public string ImageUrl
-        {
-            get { return _imgUrl; }
-        }
+        public DateTime Date;
 
         public string Subtitle
         {
@@ -84,10 +59,10 @@
 
         private void SetDate()
         {
-            int year = Int32.Parse(_year);
-            int month = Int32.Parse(_month);
-            int day = Int32.Parse(_day);
-            _date = new DateTime(year, month, day);
+            int year = Int32.Parse(Year);
+            int month = Int32.Parse(Month);
+            int day = Int32.Parse(Day);
+            Date = new DateTime(year, month, day);
         }
     }
 }
