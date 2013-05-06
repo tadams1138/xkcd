@@ -9,6 +9,7 @@ namespace xkcd.Test.DataModel
     {
         const string ComicsDataFile = @"C:\Users\Thomas\Source\Repos\xkcd\Data\comics.xml";
 
+        // This is an integration test/tool to update the comics.xml file to the latest json on the web
         [Ignore]
         [TestMethod]
         public void RefreshComicsDataFile()
