@@ -20,6 +20,7 @@ namespace xkcd.DataModel
         public static event NotifyCollectionChangedEventHandler CollectionChanged;
 
         private static readonly ComicDataSource _comicDataSource = new ComicDataSource();
+        private static Random randomNumberGenerator = new Random(DateTime.Now.Millisecond);
 
         private readonly Collection<Comic> _allItems = new Collection<Comic>();
 
@@ -30,8 +31,14 @@ namespace xkcd.DataModel
 
         public static Comic GetItem(int number)
         {
-            var matches = AllItems.FirstOrDefault(item => item.Number.Equals(number));
+            var matches = AllItems.First(item => item._num == number);
             return matches;
+        }
+
+        public static int GetRandomComicNumber()
+        {
+            int randomIndex = randomNumberGenerator.Next(0, AllItems.Count - 1);
+            return AllItems[randomIndex].Number;
         }
 
         public static IEnumerable<int> GetYears()
@@ -49,7 +56,7 @@ namespace xkcd.DataModel
                    select new DateTime(year, d.Key.Month, 1);
         }
 
-        internal static IEnumerable<Comic> GetComics(int year, int month)
+        public static IEnumerable<Comic> GetComics(int year, int month)
         {
             return from p in AllItems
                    where p.Date.Year == year && p.Date.Month == month
@@ -57,25 +64,23 @@ namespace xkcd.DataModel
                    select p;
         }
 
-        public static async Task UpdateComicData(Stream comicsStream)
+        public static async Task UpdateComicData()
         {
-            LoadDataFromFile(comicsStream);
-
-            int latestComicNumberInDataSource = _comicDataSource.GetLatestComicNumber();
+            int latestComicNumberInDataSource = GetNumberOfLatestComic();
             Comic latestComic = await GetComicFromWeb(CurrentComicUrl);
 
-            if (latestComic.Number > latestComicNumberInDataSource)
+            if (latestComic._num > latestComicNumberInDataSource)
             {
                 await AddLatestComicsToDataSource(latestComicNumberInDataSource, latestComic);
             }
         }
 
-        private static void LoadDataFromFile(Stream stream)
+        public static void LoadDataFromFile(Stream stream)
         {
             ObservableCollection<Comic> comics;
             using (var xmlReader = XmlReader.Create(stream))
             {
-                var ser = new DataContractSerializer(typeof (ObservableCollection<Comic>));
+                var ser = new DataContractSerializer(typeof(ObservableCollection<Comic>));
                 comics = (ObservableCollection<Comic>)ser.ReadObject(xmlReader, true);
             }
 
@@ -97,7 +102,7 @@ namespace xkcd.DataModel
 
         private static async Task AddLatestComicsToDataSource(int latestComicNumberInDataSource, Comic latestComic)
         {
-            for (int i = latestComicNumberInDataSource + 1; i < latestComic.Number; i++)
+            for (int i = latestComicNumberInDataSource + 1; i < latestComic._num; i++)
             {
                 try
                 {
@@ -134,9 +139,9 @@ namespace xkcd.DataModel
             }
         }
 
-        private int GetLatestComicNumber()
+        public static int GetNumberOfLatestComic()
         {
-            return _allItems.Any() ? _allItems.Max(p => p.Number) : 0;
+            return AllItems.Max(p => p._num);
         }
     }
 }

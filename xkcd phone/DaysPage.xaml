@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="xkcd_phone.MonthsPage"
+    x:Class="xkcd_phone.DaysPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -7,7 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=Microsoft.Phone"
-    xmlns:common="clr-namespace:xkcd_phone.Common"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -16,11 +15,10 @@
     shell:SystemTray.IsVisible="True">
 
     <navigation:Page.Resources>
-        <common:DateToMonthConverter x:Key="MonthConverter" />
-        
-        <DataTemplate x:Key="MonthTemplate">
-            <StackPanel Margin="0,0,0,17" HorizontalAlignment="Center">
-                <TextBlock Text="{Binding Converter={StaticResource MonthConverter}}" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+        <DataTemplate x:Key="ComicIconTemplate">
+            <StackPanel HorizontalAlignment="Center" Margin="0,0,0,17">
+                <TextBlock Text="{Binding}" Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="NoWrap"/>
+                <Image Height="100" Width="300" Source="{Binding ImageUrl}" Stretch="UniformToFill" AutomationProperties.Name="{Binding}"/>
             </StackPanel>
         </DataTemplate>
     </navigation:Page.Resources>
@@ -63,7 +61,7 @@
                 x:Name="MainLongListSelector" 
                 Margin="0,0,-12,0" 
                 ItemsSource="{Binding}" 
-                ItemTemplate="{StaticResource MonthTemplate}"
+                ItemTemplate="{StaticResource ComicIconTemplate}"
                 SelectionChanged="MainLongListSelector_SelectionChanged">
             </phone:LongListSelector>
         </Grid>

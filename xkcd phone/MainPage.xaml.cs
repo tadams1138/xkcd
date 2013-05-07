@@ -1,6 +1,7 @@
 ﻿using Microsoft.Phone.Tasks;
 using System;
 using System.Windows;
+using xkcd.DataModel;
 
 namespace xkcd_phone
 {
@@ -13,7 +14,8 @@ namespace xkcd_phone
 
         private void LatestButton_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            int numberOfLatestComic = ComicDataSource.GetNumberOfLatestComic();
+            NavigationService.Navigate(new Uri("/ComicPage.xaml?number=" + numberOfLatestComic.ToString(), UriKind.Relative));
         }
 
         private void ByDateButton_OnClick(object sender, RoutedEventArgs e)
@@ -23,7 +25,8 @@ namespace xkcd_phone
 
         private void RandomButton_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            int randomComicNumber = ComicDataSource.GetRandomComicNumber();
+            NavigationService.Navigate(new Uri("/ComicPage.xaml?number=" + randomComicNumber.ToString(), UriKind.Relative));
         }
 
         private void WebsiteButton_OnClick(object sender, RoutedEventArgs e)

@@ -22,8 +22,8 @@ namespace xkcd.Test.DataModel
                   .Be(
                       "It ships with a version of Google Now that alerts you when it's too late to leave for your appointments.");
             result.Date.Should().Be(new DateTime(2013, 5, 3));
-            result.Number.Should().Be(1207);
-            result.ImageUrl.Should().Be(@"http://imgs.xkcd.com/comics/airaware.png");
+            result._num.Should().Be(1207);
+            result._img.Should().Be(@"http://imgs.xkcd.com/comics/airaware.png");
         }
     }
 }

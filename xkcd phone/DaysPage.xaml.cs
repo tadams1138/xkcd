@@ -1,5 +1,4 @@
-﻿using Microsoft.Phone.Controls;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -7,19 +6,19 @@ using xkcd.DataModel;
 
 namespace xkcd_phone
 {
-    public partial class MonthsPage
+    public partial class DaysPage
     {
-        private readonly ObservableCollection<DateTime> _months = new ObservableCollection<DateTime>();
-        private int _year;
+        private readonly ObservableCollection<Comic> _comics = new ObservableCollection<Comic>();
+        private DateTime _month;
         bool _handleDataEvent;
 
         // Constructor
-        public MonthsPage()
+        public DaysPage()
         {
             InitializeComponent();
 
             // Set the data context of the LongListSelector control to the sample data
-            DataContext = _months;
+            DataContext = _comics;
             
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
@@ -28,11 +27,11 @@ namespace xkcd_phone
         // Load data for the ViewModel Items
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string year;
-            if (NavigationContext.QueryString.TryGetValue("year", out year))
+            string month;
+            if (NavigationContext.QueryString.TryGetValue("month", out month))
             {
-                _year = int.Parse(year);
-                PageTitle.Text = _year.ToString();
+                _month = DateTime.Parse(month);
+                PageTitle.Text = _month.ToString("MMMM yyyy");
 
                 RefreshCollection();
                 
@@ -46,11 +45,11 @@ namespace xkcd_phone
         
         private void RefreshCollection()
         {
-            var newCollection = ComicDataSource.GetMonths(_year);
-            _months.Clear();
-            foreach (DateTime month in newCollection)
+            var newCollection = ComicDataSource.GetComics(_month.Year, _month.Month);
+            _comics.Clear();
+            foreach (Comic c in newCollection)
             {
-                _months.Add(month);
+                _comics.Add(c);
             }
         }
 
@@ -67,7 +66,7 @@ namespace xkcd_phone
                 return;
 
             // Navigate to the new page
-            NavigationService.Navigate(new Uri("/DaysPage.xaml?month=" + ((DateTime)MainLongListSelector.SelectedItem).ToString(), UriKind.Relative));
+            NavigationService.Navigate(new Uri("/ComicPage.xaml?number=" + ((Comic)MainLongListSelector.SelectedItem)._num.ToString(), UriKind.Relative));
 
             // Reset selected item to null (no selection)
             MainLongListSelector.SelectedItem = null;

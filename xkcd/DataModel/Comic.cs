@@ -10,7 +10,7 @@
     public class Comic
     {
         [DataMember(Name = "num")]
-        public readonly int Number;
+        public readonly int _num;
 
         [DataMember(Name = "title")]
         public readonly string Title;
@@ -19,7 +19,7 @@
         public readonly string AltText;
 
         [DataMember(Name = "img")]
-        public readonly string ImageUrl;
+        public readonly string _img;
 
         [DataMember(Name = "day")]
         public readonly string Day;
@@ -32,12 +32,22 @@
 
         [DataMember(Name = "date")]
         public DateTime Date;
+        
+        public int Number
+        {
+            get { return _num; }
+        }
 
         public string Subtitle
         {
-            get { return string.Format("#{0} {1}", Number, Date.ToString("d")); }
+            get { return string.Format("#{0} {1}", _num, Date.ToString("d")); }
         }
 
+        public string ImageUrl
+        {
+            get { return _img; }
+        }
+        
         public override string ToString()
         {
             return Title;
@@ -48,11 +58,11 @@
             using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(json)))
             {
                 var serializer =
-                    new DataContractJsonSerializer(typeof (Comic));
+                    new DataContractJsonSerializer(typeof(Comic));
 
                 var comic = (Comic)serializer.ReadObject(ms);
                 comic.SetDate();
-                
+
                 return comic;
             }
         }

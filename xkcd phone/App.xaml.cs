@@ -67,6 +67,7 @@ namespace xkcd_phone
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            LoadComicDataSource();
             UpdateComicDataSource();
         }
 
@@ -230,45 +231,67 @@ namespace xkcd_phone
             }
         }
 
+        private void LoadComicDataSource()
+        {
+            Task result = LoadComicsDataFile();
+            result.Wait();
+        }
+
         private async void UpdateComicDataSource()
         {
-            using (var readStream = await LoadComicsDataFile())
+            bool failedUpdate = false;
+
+            try
             {
-                await ComicDataSource.UpdateComicData(readStream);
+                await ComicDataSource.UpdateComicData();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Failed to get update form web.");
+                failedUpdate = true;
             }
 
-            using (var saveStream = await GetSaveStream())
+            if (!failedUpdate)
+            {
+                await SaveComicData();
+            }
+        }
+
+        private async Task SaveComicData()
+        {
+            var outFile = await _storageFolder.CreateFileAsync(ComicsDataFile, CreationCollisionOption.ReplaceExisting);
+            using (var saveStream = await outFile.OpenStreamForWriteAsync())
             {
                 ComicDataSource.SaveComicData(saveStream);
             }
         }
 
-        private async Task<Stream> GetSaveStream()
+        private async Task LoadComicsDataFile()
         {
-            var outFile = await _storageFolder.CreateFileAsync(ComicsDataFile, CreationCollisionOption.ReplaceExisting);
-            var saveStream = await outFile.OpenStreamForWriteAsync();
-            return saveStream;
-        }
+            bool loadOriginalComicsData = false;
 
-        private async Task<Stream> LoadComicsDataFile()
-        {
-            StorageFile inFile = null;
-            bool fileExists = true;
             try
             {
-                inFile = await _storageFolder.GetFileAsync(ComicsDataFile);
+                await LoadComicsDataFile(_storageFolder);
             }
             catch (FileNotFoundException)
             {
-                fileExists = false;
+                loadOriginalComicsData = true;
             }
 
-            if (!fileExists)
+            if (loadOriginalComicsData)
             {
-                inFile = await Package.Current.InstalledLocation.GetFileAsync(ComicsDataFile);
+                await LoadComicsDataFile(Package.Current.InstalledLocation);
             }
+        }
 
-            return await inFile.OpenStreamForReadAsync();
+        private async Task LoadComicsDataFile(StorageFolder folder)
+        {
+            var inFile = await folder.GetFileAsync(ComicsDataFile);
+            using (var readStream = await inFile.OpenStreamForReadAsync())
+            {
+                ComicDataSource.LoadDataFromFile(readStream);
+            }
         }
     }
 }
