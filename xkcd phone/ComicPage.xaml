@@ -25,6 +25,7 @@
                 <StackPanel HorizontalAlignment="Center" Margin="0,0,0,17">
                     <TextBlock Text="{Binding}" Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="NoWrap"/>
                     <TextBlock Text="{Binding Subtitle}" Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="NoWrap"/>
+                    <Button Click="Hyperlink_OnClick">Website</Button>
                 </StackPanel>
                 <telerikSlideView:PanAndZoomImage 
                     Grid.Row="1" 

@@ -16,9 +16,11 @@ namespace xkcd.Test.DataModel
         {
             using (var readStream = LoadComicsDataFile())
             {
-                var task = xkcd.DataModel.ComicDataSource.UpdateComicData(readStream);
-                task.Wait();
+                xkcd.DataModel.ComicDataSource.LoadDataFromFile(readStream);
             }
+
+            var task = xkcd.DataModel.ComicDataSource.UpdateComicData();
+            task.Wait();
 
             using (var saveStream = GetSaveStream())
             {
@@ -34,8 +36,8 @@ namespace xkcd.Test.DataModel
 
         private Stream LoadComicsDataFile()
         {
-            var saveStream = new FileStream(ComicsDataFile, FileMode.Open);
-            return saveStream;
+            var readStream = new FileStream(ComicsDataFile, FileMode.Open);
+            return readStream;
         }
     }
 }

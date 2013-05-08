@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Navigation;
+using Microsoft.Phone.Tasks;
 using xkcd.DataModel;
 
 namespace xkcd_phone
@@ -31,6 +31,13 @@ namespace xkcd_phone
         {
             var selectedComic = (Comic)SlideView.SelectedItem;
             MessageBox.Show(selectedComic.AltText);
+        }
+
+        private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
+        {
+            var selected = (Comic)SlideView.SelectedItem;
+            var webBrowserTask = new WebBrowserTask { Uri = selected.Uri };
+            webBrowserTask.Show();
         }
     }
 }

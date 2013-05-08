@@ -272,7 +272,7 @@ namespace xkcd_phone
 
             try
             {
-                await LoadComicsDataFile(_storageFolder);
+                await LoadComicsDataFile(_storageFolder).ConfigureAwait(false);
             }
             catch (FileNotFoundException)
             {
@@ -281,14 +281,14 @@ namespace xkcd_phone
 
             if (loadOriginalComicsData)
             {
-                await LoadComicsDataFile(Package.Current.InstalledLocation);
+                await LoadComicsDataFile(Package.Current.InstalledLocation).ConfigureAwait(false);
             }
         }
 
         private async Task LoadComicsDataFile(StorageFolder folder)
         {
-            var inFile = await folder.GetFileAsync(ComicsDataFile);
-            using (var readStream = await inFile.OpenStreamForReadAsync())
+            var inFile = await folder.GetFileAsync(ComicsDataFile).AsTask().ConfigureAwait(false);
+            using (var readStream = await inFile.OpenStreamForReadAsync().ConfigureAwait(false))
             {
                 ComicDataSource.LoadDataFromFile(readStream);
             }
