@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="9525TISoftware.xkcdTheBrowser" Publisher="CN=767287B8-2BBF-4473-8D71-AFFB0BF57F6E" Version="1.0.0.0" />
+  <Identity Name="9525TISoftware.xkcdTheBrowser" Publisher="CN=767287B8-2BBF-4473-8D71-AFFB0BF57F6E" Version="1.0.0.1" />
   <Properties>
     <DisplayName>xkcd The Browser</DisplayName>
     <PublisherDisplayName>T &amp; I Software</PublisherDisplayName>
