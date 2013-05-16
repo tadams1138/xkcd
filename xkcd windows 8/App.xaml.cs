@@ -3,10 +3,14 @@ using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Foundation;
 using Windows.Storage;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media.Animation;
 using xkcd_windows_8.Common;
 using xkcd.DataModel;
 
@@ -16,10 +20,14 @@ namespace xkcd_windows_8
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    sealed partial class App
     {
         private const string ComicsDataFile = "comics.xml";
         private readonly StorageFolder _storageFolder = ApplicationData.Current.LocalFolder;
+
+        private Popup _settingsPopup;
+        private Rect _windowBounds;
+        private const double SettingsWidth = 646;
 
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
@@ -27,8 +35,13 @@ namespace xkcd_windows_8
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
+        }
+
+        void OnWindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        {
+            _windowBounds = Window.Current.Bounds;
         }
 
         /// <summary>
@@ -83,6 +96,92 @@ namespace xkcd_windows_8
             }
             // Ensure the current window is active
             Window.Current.Activate();
+
+            _windowBounds = Window.Current.Bounds;
+
+            // Added to listen for events when the window size is updated.
+            Window.Current.SizeChanged += OnWindowSizeChanged;
+        }
+
+        protected override void OnWindowCreated(WindowCreatedEventArgs args)
+        {
+            base.OnWindowCreated(args);
+            SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
+        }
+
+        private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs eventArgs)
+        {
+            var aboutCommand = new SettingsCommand("AboutId", "About", OnAboutCommand);
+            var privacyCommand = new SettingsCommand("PrivacyId", "Privacy Statement", OnPrivacyCommand);
+            var rateAndReviewCommand = new SettingsCommand("RateAndReviewId", "Rate and Review", OnRateAndReviewCommand);
+            eventArgs.Request.ApplicationCommands.Add(aboutCommand);
+            eventArgs.Request.ApplicationCommands.Add(privacyCommand);
+            eventArgs.Request.ApplicationCommands.Add(rateAndReviewCommand);
+        }
+
+        void OnAboutCommand(IUICommand command)
+        {
+            var mypane = new AboutFlyout();
+            ShowFlyout(mypane);
+        }
+
+        void OnRateAndReviewCommand(IUICommand command)
+        {
+            var uri = new Uri("ms-windows-store:REVIEW?PFN=9525TISoftware.xkcdTheBrowser_bc0wgwa5kk60m");
+            Windows.System.Launcher.LaunchUriAsync(uri);
+        }
+
+        void OnPrivacyCommand(IUICommand command)
+        {
+            var uri = new Uri("http://tadams1138.blogspot.com/p/xkcd-the.html");
+            Windows.System.Launcher.LaunchUriAsync(uri);
+        }
+
+        private void ShowFlyout(LayoutAwarePage mypane)
+        {
+            _settingsPopup = new Popup();
+            _settingsPopup.Closed += OnPopupClosed;
+            Window.Current.Activated += OnWindowActivated;
+            _settingsPopup.IsLightDismissEnabled = true;
+            _settingsPopup.Width = SettingsWidth;
+            _settingsPopup.Height = _windowBounds.Height;
+
+            // Add the proper animation for the panel.
+            _settingsPopup.ChildTransitions = new TransitionCollection
+                {
+                    new PaneThemeTransition
+                        {
+                            Edge = (SettingsPane.Edge == SettingsEdgeLocation.Right)
+                                       ? EdgeTransitionLocation.Right
+                                       : EdgeTransitionLocation.Left
+                        }
+                };
+
+            // Create a SettingsFlyout the same dimenssions as the Popup.
+            mypane.Width = SettingsWidth;
+            mypane.Height = _windowBounds.Height;
+
+            // Place the SettingsFlyout inside our Popup window.
+            _settingsPopup.Child = mypane;
+
+            // Let's define the location of our Popup.
+            _settingsPopup.SetValue(Canvas.LeftProperty,
+                                    SettingsPane.Edge == SettingsEdgeLocation.Right ? (_windowBounds.Width - SettingsWidth) : 0);
+            _settingsPopup.SetValue(Canvas.TopProperty, 0);
+            _settingsPopup.IsOpen = true;
+        }
+
+        private void OnWindowActivated(object sender, Windows.UI.Core.WindowActivatedEventArgs e)
+        {
+            if (e.WindowActivationState == Windows.UI.Core.CoreWindowActivationState.Deactivated)
+            {
+                _settingsPopup.IsOpen = false;
+            }
+        }
+
+        void OnPopupClosed(object sender, object e)
+        {
+            Window.Current.Activated -= OnWindowActivated;
         }
 
         /// <summary>

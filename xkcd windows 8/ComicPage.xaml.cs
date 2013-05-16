@@ -58,12 +58,26 @@ namespace xkcd_windows_8
             pageState["SelectedItem"] = selectedItem.Number;
         }
 
-        private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
+        private void WebsiteOnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 var selectedItem = (Comic)FlipView.SelectedItem;
                 Windows.System.Launcher.LaunchUriAsync(selectedItem.Uri);
+            }
+            catch (Exception ex)
+            {
+                var dialog = new MessageDialog(ex.ToString());
+                dialog.ShowAsync();
+            }
+        }
+
+        private void ExplainationClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedItem = (Comic)FlipView.SelectedItem;
+                Windows.System.Launcher.LaunchUriAsync(selectedItem.ExplanationUri);
             }
             catch (Exception ex)
             {

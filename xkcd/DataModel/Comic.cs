@@ -53,6 +53,11 @@
             get { return new Uri(string.Format("http://xkcd.com/{0}/", _num), UriKind.Absolute); }
         }
 
+        public Uri ExplanationUri
+        {
+            get { return new Uri(string.Format("http://www.explainxkcd.com/wiki/index.php?title={0}", _num), UriKind.Absolute); }
+        }
+
         public override string ToString()
         {
             return Title;

@@ -17,9 +17,10 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                    <Image Source="{Binding ImageUrl}" Stretch="UniformToFill" AutomationProperties.Name="{Binding}"/>
+                    <Image Source="{Binding ImageUrl}" Stretch="UniformToFill" />
                 </Border>
                 <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="5">
+                    <WebView ></WebView>
                     <TextBlock Text="{Binding}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
                 </StackPanel>
             </Grid>

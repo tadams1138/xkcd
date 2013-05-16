@@ -15,7 +15,8 @@
           <SmallImageURI IsRelative="true" IsResource="false">Assets\SmallIcon.png</SmallImageURI>
           <Count>0</Count>
           <IconImageURI IsRelative="true" IsResource="false">Assets\MediumIcon.png</IconImageURI>
-          <Title>xkcd</Title>
+          <Title>
+          </Title>
           <Message>
           </Message>
           <BackgroundColor>

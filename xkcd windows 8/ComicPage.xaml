@@ -57,7 +57,10 @@
                         <StackPanel HorizontalAlignment="Center" Margin="0,0,0,17">
                             <TextBlock Text="{Binding}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
                             <TextBlock Text="{Binding Subtitle}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
-                            <Button Click="Hyperlink_OnClick">Website</Button>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,17">
+                                <Button Click="WebsiteOnClick">Website</Button>
+                                <Button Click="ExplainationClick">Explaination</Button>
+                            </StackPanel>
                         </StackPanel>
                         <!--
                         UserControl chosen as the templated item because it supports visual state management

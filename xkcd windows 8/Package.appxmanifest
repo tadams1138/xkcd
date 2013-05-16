@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="9b98a4e4-bb84-4f78-9659-0aa66285f4ab" Publisher="CN=Thomas" Version="1.0.0.0" />
+  <Identity Name="9525TISoftware.xkcdTheBrowser" Publisher="CN=767287B8-2BBF-4473-8D71-AFFB0BF57F6E" Version="1.0.0.0" />
   <Properties>
-    <DisplayName>xkcd</DisplayName>
-    <PublisherDisplayName>Thomas Adams</PublisherDisplayName>
+    <DisplayName>xkcd The Browser</DisplayName>
+    <PublisherDisplayName>T &amp; I Software</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="xkcd_windows_8.App">
-      <VisualElements DisplayName="xkcd" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="xkcd - A webcomic of romance, sarcasm, math, and language. (Not endorsed by xkcd.com)" ForegroundText="light" BackgroundColor="#464646">
+      <VisualElements DisplayName="xkcd The Browser" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="xkcd - A webcomic of romance, sarcasm, math, and language. (Not endorsed by xkcd.com)" ForegroundText="light" BackgroundColor="#464646">
         <DefaultTile ShowName="allLogos" WideLogo="Assets\WideLogo.png" />
         <SplashScreen Image="Assets\SplashScreen.png" />
         <InitialRotationPreference>
