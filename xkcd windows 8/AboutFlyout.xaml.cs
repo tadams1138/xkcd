@@ -40,10 +40,8 @@ namespace xkcd_windows_8
             {
                 return attr.Copyright;
             }
-            else
-            {
-                return "";
-            }
+
+            return string.Empty;
         }
 
         private static string GetPackageVersion()

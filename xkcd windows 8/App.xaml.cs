@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Search;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.UI.ApplicationSettings;
@@ -52,7 +53,7 @@ namespace xkcd_windows_8
         /// <param name="args">Details about the launch request and process.</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+            var rootFrame = Window.Current.Content as Frame;
 
             LoadComicDataSource();
             UpdateComicDataSource();
@@ -107,6 +108,7 @@ namespace xkcd_windows_8
         {
             base.OnWindowCreated(args);
             SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
+            SearchPane.GetForCurrentView().QuerySubmitted += OnQuerySubmitted;
         }
 
         private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs eventArgs)
@@ -264,5 +266,61 @@ namespace xkcd_windows_8
                 ComicDataSource.LoadDataFromFile(readStream);
             }
         }
+
+        /// <summary>
+        /// Invoked when the application is activated to display search results.
+        /// </summary>
+        /// <param name="args">Details about the activation request.</param>
+        protected async override void OnSearchActivated(SearchActivatedEventArgs args)
+        {
+            // If the Window isn't already using Frame navigation, insert our own Frame
+            var frame = Window.Current.Content as Frame;
+
+            // If the app does not contain a top-level frame, it is possible that this 
+            // is the initial launch of the app. Typically this method and OnLaunched 
+            // in App.xaml.cs can call a common method.
+            if (frame == null)
+            {
+                // Create a Frame to act as the navigation context and associate it with
+                // a SuspensionManager key
+                frame = new Frame();
+                SuspensionManager.RegisterFrame(frame, "AppFrame");
+
+                if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                {
+                    // Restore the saved session state only when appropriate
+                    try
+                    {
+                        await SuspensionManager.RestoreAsync();
+                    }
+                    catch (SuspensionManagerException)
+                    {
+                        //Something went wrong restoring state.
+                        //Assume there is no state and continue
+                    }
+                }
+            }
+
+            NavigatetToSearchPage(frame, args.QueryText);
+        }
+
+        private static void NavigatetToSearchPage(Frame frame, string queryText)
+        {
+            frame.Navigate(typeof (SearchResultsPage), queryText);
+            Window.Current.Content = frame;
+            Window.Current.Activate();
+        }
+
+        private void OnQuerySubmitted(SearchPane sender, SearchPaneQuerySubmittedEventArgs args)
+        {
+            var frame = Window.Current.Content as Frame;
+            if (frame != null && !(frame.Content is SearchResultsPage))
+            {
+                NavigatetToSearchPage(frame, args.QueryText);
+            }
+        }
     }
+
+    //TODO: add random, by date, latest buttons to comic headers - phase out main page (makes no sense when search page launched)
+    //Auto-load latest if no history, otehrwise load last comic
 }

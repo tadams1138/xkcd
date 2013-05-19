@@ -38,16 +38,16 @@
             <TextBlock x:Name="pageTitle" Grid.Column="1" Text="{StaticResource AppName}" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
         <StackPanel HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" >
-            <Button x:Name="LatestButton" Click="ViewLatest" Style="{StaticResource MenuButtonStyle}">
+            <Button Click="ViewLatest" Style="{StaticResource MenuButtonStyle}">
                 <TextBlock Style="{StaticResource HeaderTextStyle}">View Latest</TextBlock>
             </Button>
-            <Button x:Name="ByDateButton" Click="ViewByDate" Style="{StaticResource MenuButtonStyle}">
+            <Button Click="ViewByDate" Style="{StaticResource MenuButtonStyle}">
                 <TextBlock Style="{StaticResource HeaderTextStyle}">By Date</TextBlock>
             </Button>
-            <Button x:Name="RandomButton" Click="GoToRandom" Style="{StaticResource MenuButtonStyle}">
+            <Button Click="GoToRandom" Style="{StaticResource MenuButtonStyle}">
                 <TextBlock Style="{StaticResource HeaderTextStyle}">Random</TextBlock>
             </Button>
-            <Button x:Name="WebsiteButton" Click="GoToWebsite" Style="{StaticResource MenuButtonStyle}" >
+            <Button Click="GoToWebsite" Style="{StaticResource MenuButtonStyle}" >
                 <TextBlock Style="{StaticResource HeaderTextStyle}">Website</TextBlock>
             </Button>
         </StackPanel>

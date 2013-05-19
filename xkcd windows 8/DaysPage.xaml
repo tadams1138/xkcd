@@ -10,22 +10,6 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <DataTemplate x:Key="ComicIconTemplate">
-            <Grid Height="120" Width="300" Margin="5,0,5,2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                    <Image Source="{Binding ImageUrl}" Stretch="UniformToFill" />
-                </Border>
-                <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="5">
-                    <WebView ></WebView>
-                    <TextBlock Text="{Binding}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-        
         <!-- Collection of items displayed by this page -->
         <CollectionViewSource
             x:Name="ItemsViewSource"

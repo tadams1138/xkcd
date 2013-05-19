@@ -64,6 +64,21 @@ namespace xkcd.DataModel
                    select p;
         }
 
+        public static IEnumerable<Comic> GetComics(string queryText)
+        {
+            if (string.IsNullOrWhiteSpace(queryText))
+            {
+                return new List<Comic>();
+            }
+
+            string upperCaseQueryString = queryText.ToUpperInvariant();
+            return from p in AllItems
+                   where (p.Title != null && p.Title.ToUpperInvariant().Contains(upperCaseQueryString)) ||
+                          (p.AltText != null && p.AltText.ToUpperInvariant().Contains(upperCaseQueryString))
+                   orderby p.Date descending
+                   select p;
+        }
+
         public static async Task UpdateComicData()
         {
             int latestComicNumberInDataSource = GetNumberOfLatestComic();

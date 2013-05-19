@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.ApplicationModel.Search;
 using Windows.Graphics.Printing;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -47,6 +48,7 @@ namespace xkcd_windows_8
             DefaultViewModel["Items"] = ComicDataSource.AllItems;
             FlipView.SelectedItem = comic;
             RegisterForPrinting();
+            SearchPane.GetForCurrentView().ShowOnKeyboardInput = true;
         }
 
         /// <summary>
@@ -60,6 +62,7 @@ namespace xkcd_windows_8
             var selectedItem = (Comic)FlipView.SelectedItem;
             pageState["SelectedItem"] = selectedItem.Number;
             UnregisterForPrinting();
+            SearchPane.GetForCurrentView().ShowOnKeyboardInput = false;
         }
 
         private void WebsiteOnClick(object sender, RoutedEventArgs e)
@@ -114,7 +117,7 @@ namespace xkcd_windows_8
         /// The percent of app's margin height, content is set at 94% (0.94) of tha area's height
         /// </summary>
         private const double ApplicationContentMarginTop = 0.03;
-        
+
         /// <summary>
         /// PrintDocument is used to prepare the pages for printing. 
         /// Prepare the pages to print in the handlers for the Paginate, GetPreviewPage, and AddPages events.
@@ -136,7 +139,7 @@ namespace xkcd_windows_8
         /// First page in the printing-content series
         /// From this "virtual sized" paged content is split(text is flowing) to "printing pages"
         /// </summary>
-        private FrameworkElement _firstPage;
+        private PrintPage _printPage;
 
         /// <summary>
         /// Factory method for every scenario that will create/generate print content specific to each scenario
@@ -145,16 +148,16 @@ namespace xkcd_windows_8
         /// </summary>
         private void PreparetPrintContent()
         {
-            _firstPage = new PrintPage(_currentComic);
-            
+            _printPage = new PrintPage(_currentComic);
+
             // Add the (newley created) page to the printing root which is part of the visual tree and force it to go
             // through layout so that the linked containers correctly distribute the content inside them.
-            PrintingRoot.Children.Clear();   
-            PrintingRoot.Children.Add(_firstPage);
+            PrintingRoot.Children.Clear();
+            PrintingRoot.Children.Add(_printPage);
             PrintingRoot.InvalidateMeasure();
             PrintingRoot.UpdateLayout();
         }
-        
+
         /// <summary>
         /// This is the event handler for PrintManager.PrintTaskRequested.
         /// </summary>
@@ -168,7 +171,7 @@ namespace xkcd_windows_8
             {
                 title += " " + _currentComic.Number + " - " + _currentComic;
             }
-            
+
             printTask = e.Request.CreatePrintTask(title, sourceRequested =>
                 {
                     // Print Task event handler is invoked when the print job is completed.
@@ -187,7 +190,7 @@ namespace xkcd_windows_8
 
                     sourceRequested.SetSource(_printDocumentSource);
                 });
-        } 
+        }
 
         /// <summary>
         /// This function registers the app for printing with Windows and sets up the necessary event handlers for the print process.
@@ -232,7 +235,7 @@ namespace xkcd_windows_8
 
             PrintingRoot.Children.Clear();
         }
-        
+
         /// <summary>
         /// This is the event handler for PrintDocument.Paginate. It creates print preview pages for the app.
         /// </summary>
@@ -242,10 +245,10 @@ namespace xkcd_windows_8
         {
             // Clear the cache of preview pages 
             PrintPreviewPages.Clear();
-            
+
             // Clear the printing root of preview pages
             PrintingRoot.Children.Clear();
-            
+
             // Get the PrintTaskOptions
             var printingOptions = e.PrintTaskOptions;
 
@@ -255,7 +258,7 @@ namespace xkcd_windows_8
             // We know there is at least one page to be printed. passing null as the first parameter to
             // AddOnePrintPreviewPage tells the function to add the first page.
             AddOnePrintPreviewPage(pageDescription);
-            
+
             var printDoc = (PrintDocument)sender;
 
             // Report the number of preview pages created
@@ -292,7 +295,7 @@ namespace xkcd_windows_8
             }
 
             var printDoc = (PrintDocument)sender;
-            
+
             // Indicate that all of the print pages have been provided
             printDoc.AddPagesComplete();
         }
@@ -304,36 +307,33 @@ namespace xkcd_windows_8
         /// <param name="printPageDescription">Printer's page description</param>
         private void AddOnePrintPreviewPage(PrintPageDescription printPageDescription)
         {
-            // XAML element that is used to represent to "printing page"
-            FrameworkElement page = _firstPage;
-            
             // Set "paper" width
-            page.Width = printPageDescription.PageSize.Width;
-            page.Height = printPageDescription.PageSize.Height;
+            _printPage.Width = printPageDescription.PageSize.Width;
+            _printPage.Height = printPageDescription.PageSize.Height;
 
-            var printableArea = (Grid)page.FindName("PrintableArea");
+            var printableArea = (Grid)_printPage.Content;
 
             // Get the margins size
             // If the ImageableRect is smaller than the app provided margins use the ImageableRect
             double marginWidth = Math.Max(
                 printPageDescription.PageSize.Width - printPageDescription.ImageableRect.Width,
-                printPageDescription.PageSize.Width*ApplicationContentMarginLeft*2);
+                printPageDescription.PageSize.Width * ApplicationContentMarginLeft * 2);
             double marginHeight =
                 Math.Max(printPageDescription.PageSize.Height - printPageDescription.ImageableRect.Height,
-                         printPageDescription.PageSize.Height*ApplicationContentMarginTop*2);
+                         printPageDescription.PageSize.Height * ApplicationContentMarginTop * 2);
 
             // Set-up "printable area" on the "paper"
-            printableArea.Width = _firstPage.Width - marginWidth;
-            printableArea.Height = _firstPage.Height - marginHeight;
+            printableArea.Width = _printPage.Width - marginWidth;
+            printableArea.Height = _printPage.Height - marginHeight;
 
             // Add the (newley created) page to the printing root which is part of the visual tree and force it to go
             // through layout so that the linked containers correctly distribute the content inside them.            
-            PrintingRoot.Children.Add(page);
+            PrintingRoot.Children.Add(_printPage);
             PrintingRoot.InvalidateMeasure();
             PrintingRoot.UpdateLayout();
-            
+
             // Add the page to the page preview collection
-            PrintPreviewPages.Add(page);
+            PrintPreviewPages.Add(_printPage);
         }
         #endregion
     }
