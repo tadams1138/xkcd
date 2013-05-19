@@ -15,6 +15,32 @@
         <CollectionViewSource
             x:Name="ItemsViewSource"
             Source="{Binding Items}"/>
+
+        <Style x:Key="ByDateAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="ByDateAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="By Date"/>
+            <Setter Property="Content" Value="&#xE163;"/>
+        </Style>
+        <Style x:Key="LatestAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="LatestAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Latest"/>
+            <Setter Property="Content" Value="&#xE101;"/>
+        </Style>
+        <Style x:Key="RandomAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="RandomAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Random"/>
+            <Setter Property="Content" Value="&#xE14B;"/>
+        </Style>
+        <Style x:Key="WebsiteAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="WebsiteAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Website"/>
+            <Setter Property="Content" Value="&#xE128;"/>
+        </Style>
+        <Style x:Key="ExplainationAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="ExplainationAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Explaination"/>
+            <Setter Property="Content" Value="&#xE11B;"/>
+        </Style>
     </Page.Resources>
 
     <!--
@@ -34,7 +60,7 @@
             one item at a time, allowing the user to flip through all items in the chosen
             group
         -->
-        
+
         <FlipView
             x:Name="FlipView"
             AutomationProperties.AutomationId="ItemsFlipView"
@@ -59,10 +85,6 @@
                         <StackPanel HorizontalAlignment="Center" Margin="0,0,0,17">
                             <TextBlock Text="{Binding}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
                             <TextBlock Text="{Binding Subtitle}" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,17">
-                                <Button Click="WebsiteOnClick">Website</Button>
-                                <Button Click="ExplainationClick">Explaination</Button>
-                            </StackPanel>
                         </StackPanel>
                         <!--
                         UserControl chosen as the templated item because it supports visual state management
@@ -85,14 +107,22 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="BackButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=PageRoot}" Style="{StaticResource BackButtonStyle}"/>
             <TextBlock x:Name="PageTitle" Text="{StaticResource AppName}" Style="{StaticResource PageHeaderTextStyle}" Grid.Column="1" IsHitTestVisible="false"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Click="ViewByDate"  Style="{StaticResource ByDateAppBarButtonStyle}"/>
+                <Button Click="ViewLatest"  Style="{StaticResource LatestAppBarButtonStyle}"/>
+                <Button Click="ViewRandom"  Style="{StaticResource RandomAppBarButtonStyle}"/>
+                <Button Click="WebsiteOnClick"  Style="{StaticResource WebsiteAppBarButtonStyle}"/>
+                <Button Click="ExplainationClick"  Style="{StaticResource ExplainationAppBarButtonStyle}"/>
+            </StackPanel>
         </Grid>
 
         <Canvas x:Name="PrintingRoot" Grid.Row="2"/>
-        
+
         <VisualStateManager.VisualStateGroups>
 
             <!-- Visual states reflect the application's view state -->

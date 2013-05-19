@@ -90,7 +90,8 @@ namespace xkcd_windows_8
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(MainPage), "Main"))
+                int latestComicNumber = ComicDataSource.GetNumberOfLatestComic();
+                if (!rootFrame.Navigate(typeof(ComicPage), latestComicNumber))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -320,7 +321,4 @@ namespace xkcd_windows_8
             }
         }
     }
-
-    //TODO: add random, by date, latest buttons to comic headers - phase out main page (makes no sense when search page launched)
-    //Auto-load latest if no history, otehrwise load last comic
 }

@@ -29,16 +29,22 @@ namespace xkcd.DataModel
             get { return _comicDataSource._allItems; }
         }
 
-        public static Comic GetItem(int number)
+        public static Comic GetComic(int number)
         {
             var matches = AllItems.First(item => item._num == number);
             return matches;
         }
 
-        public static int GetRandomComicNumber()
+        public static Comic GetRandomComicNumber()
         {
             int randomIndex = randomNumberGenerator.Next(0, AllItems.Count - 1);
-            return AllItems[randomIndex].Number;
+            return AllItems[randomIndex];
+        }
+
+        public static Comic GetLatestComic()
+        {
+            int latestComicNumber = GetNumberOfLatestComic();
+            return GetComic(latestComicNumber);
         }
 
         public static IEnumerable<int> GetYears()
@@ -115,6 +121,11 @@ namespace xkcd.DataModel
             }
         }
 
+        public static int GetNumberOfLatestComic()
+        {
+            return AllItems.Max(p => p._num);
+        }
+
         private static async Task AddLatestComicsToDataSource(int latestComicNumberInDataSource, Comic latestComic)
         {
             for (int i = latestComicNumberInDataSource + 1; i < latestComic._num; i++)
@@ -152,11 +163,6 @@ namespace xkcd.DataModel
                 string comicJson = reader.ReadToEnd();
                 return Comic.FromJson(comicJson);
             }
-        }
-
-        public static int GetNumberOfLatestComic()
-        {
-            return AllItems.Max(p => p._num);
         }
     }
 }

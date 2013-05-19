@@ -22,7 +22,7 @@ namespace xkcd_phone
             if (NavigationContext.QueryString.TryGetValue("number", out number))
             {
                 int num = Int32.Parse(number);
-                var selected = ComicDataSource.GetItem(num);
+                var selected = ComicDataSource.GetComic(num);
                 SlideView.SelectedItem = selected;
             }
         }

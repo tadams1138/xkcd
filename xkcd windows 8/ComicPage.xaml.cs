@@ -4,7 +4,6 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Search;
 using Windows.Foundation;
 using Windows.Graphics.Printing;
-using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -49,13 +48,14 @@ namespace xkcd_windows_8
                 navigationParameter = pageState["SelectedItem"];
             }
 
-            var comic = ComicDataSource.GetItem((int)navigationParameter);
+            var comic = ComicDataSource.GetComic((int)navigationParameter);
             DefaultViewModel["Items"] = ComicDataSource.AllItems;
             FlipView.SelectedItem = comic;
+
             RegisterForPrinting();
             SearchPane.GetForCurrentView().ShowOnKeyboardInput = true;
-            this.dataTransferManager = DataTransferManager.GetForCurrentView();
-            this.dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager, DataRequestedEventArgs>(this.OnDataRequested);
+            dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += OnDataRequested;
         }
 
         /// <summary>
@@ -82,10 +82,24 @@ namespace xkcd_windows_8
         {
             if (_currentComic != null)
             {
+                DataRequestDeferral deferral = request.GetDeferral();
                 DataPackage requestData = request.Data;
                 requestData.Properties.Title = _currentComic.Title;
-                requestData.Properties.Description = _currentComic.Subtitle; // The description is optional.
+                requestData.Properties.Description = _currentComic.Subtitle;
+
+                string textToShare = string.Format("Title: {1}{0}Number: {2}{0}Published: {3}{0}Alternate Text: {4}",
+                                                   Environment.NewLine,
+                                                   _currentComic.Title,
+                                                   _currentComic.Number,
+                                                   _currentComic.Date.ToString("d"),
+                                                   _currentComic.AltText);
+                requestData.SetText(textToShare);
+
+                var bitmap = RandomAccessStreamReference.CreateFromUri(_currentComic.ImageUri);
+                request.Data.Properties.Thumbnail = bitmap;
+                requestData.SetBitmap(bitmap);
                 requestData.SetUri(_currentComic.Uri);
+                deferral.Complete();
             }
             else
             {
@@ -364,5 +378,20 @@ namespace xkcd_windows_8
             PrintPreviewPages.Add(_printPage);
         }
         #endregion
+
+        private void ViewByDate(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(YearsPage), "AllYears");
+        }
+
+        private void ViewLatest(object sender, RoutedEventArgs e)
+        {
+            FlipView.SelectedItem = ComicDataSource.GetLatestComic();
+        }
+
+        private void ViewRandom(object sender, RoutedEventArgs e)
+        {
+            FlipView.SelectedItem = ComicDataSource.GetRandomComicNumber();
+        }
     }
 }
