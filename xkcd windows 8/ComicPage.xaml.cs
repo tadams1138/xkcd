@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Search;
+using Windows.Foundation;
 using Windows.Graphics.Printing;
+using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -20,6 +24,7 @@ namespace xkcd_windows_8
     /// </summary>
     public sealed partial class ComicPage
     {
+        private DataTransferManager dataTransferManager;
         private Comic _currentComic;
 
         public ComicPage()
@@ -49,6 +54,8 @@ namespace xkcd_windows_8
             FlipView.SelectedItem = comic;
             RegisterForPrinting();
             SearchPane.GetForCurrentView().ShowOnKeyboardInput = true;
+            this.dataTransferManager = DataTransferManager.GetForCurrentView();
+            this.dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager, DataRequestedEventArgs>(this.OnDataRequested);
         }
 
         /// <summary>
@@ -63,6 +70,27 @@ namespace xkcd_windows_8
             pageState["SelectedItem"] = selectedItem.Number;
             UnregisterForPrinting();
             SearchPane.GetForCurrentView().ShowOnKeyboardInput = false;
+            this.dataTransferManager.DataRequested -= new TypedEventHandler<DataTransferManager, DataRequestedEventArgs>(this.OnDataRequested);
+        }
+
+        private void OnDataRequested(DataTransferManager sender, DataRequestedEventArgs e)
+        {
+            GetShareContent(e.Request);
+        }
+
+        private void GetShareContent(DataRequest request)
+        {
+            if (_currentComic != null)
+            {
+                DataPackage requestData = request.Data;
+                requestData.Properties.Title = _currentComic.Title;
+                requestData.Properties.Description = _currentComic.Subtitle; // The description is optional.
+                requestData.SetUri(_currentComic.Uri);
+            }
+            else
+            {
+                request.FailWithDisplayText("Select a comic you would like to share and try again.");
+            }
         }
 
         private void WebsiteOnClick(object sender, RoutedEventArgs e)
@@ -199,10 +227,10 @@ namespace xkcd_windows_8
         {
             // Create the PrintDocument.
             _printDocument = new PrintDocument();
-
+            
             // Save the DocumentSource.
             _printDocumentSource = _printDocument.DocumentSource;
-
+            
             // Add an event handler which creates preview pages.
             _printDocument.Paginate += CreatePrintPreviewPages;
 

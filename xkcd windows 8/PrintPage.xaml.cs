@@ -24,7 +24,7 @@ namespace xkcd_windows_8
             Title.Text = comic.ToString();
             Subtitle.Text = comic.Subtitle;
             AltText.Text = comic.AltText;
-            Image.Source = new BitmapImage(new Uri(comic.ImageUrl, UriKind.RelativeOrAbsolute));
+            Image.Source = new BitmapImage(comic.ImageUri);
 
             SizeChanged += (sender, args) =>
                 {

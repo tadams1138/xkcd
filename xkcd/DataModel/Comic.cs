@@ -47,7 +47,12 @@
         {
             get { return _img; }
         }
-        
+
+        public Uri ImageUri
+        {
+            get { return new Uri(_img, UriKind.Absolute); }
+        }
+
         public Uri Uri
         {
             get { return new Uri(string.Format("http://xkcd.com/{0}/", _num), UriKind.Absolute); }
