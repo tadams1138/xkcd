@@ -256,9 +256,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ButtonBase">
-                    <Grid x:Name="RootGrid" Width="100" Background="Transparent">
-                        <StackPanel VerticalAlignment="Top" Margin="0,12,0,11">
-                            <Grid Width="40" Height="40" Margin="0,0,0,5" HorizontalAlignment="Center">
+                    <Grid x:Name="RootGrid" Width="88" Background="Transparent">
+                        <StackPanel VerticalAlignment="Top">
+                            <Grid Width="40" Height="40" HorizontalAlignment="Center">
                                 <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0" Foreground="{StaticResource AppBarItemBackgroundThemeBrush}"/>
                                 <TextBlock x:Name="OutlineGlyph" Text="&#xE0A7;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0"/>
                                 <ContentPresenter x:Name="Content" HorizontalAlignment="Center" Margin="-1,-1,0,0" VerticalAlignment="Center"/>
@@ -267,7 +267,7 @@
                                 x:Name="TextLabel"
                                 Text="{TemplateBinding AutomationProperties.Name}"
                                 Foreground="{StaticResource AppBarItemForegroundThemeBrush}"
-                                Margin="0,0,2,0"
+                                Margin="0,5,2,0"
                                 FontSize="12"
                                 TextAlignment="Center"
                                 Width="88"
@@ -302,7 +302,7 @@
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="60"/>
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="40"/>
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -312,7 +312,7 @@
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Width">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="60"/>
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="40"/>
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>

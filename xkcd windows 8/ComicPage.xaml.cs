@@ -5,6 +5,7 @@ using Windows.ApplicationModel.Search;
 using Windows.Foundation;
 using Windows.Graphics.Printing;
 using Windows.Storage.Streams;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -30,7 +31,7 @@ namespace xkcd_windows_8
         {
             InitializeComponent();
         }
-
+       
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided when recreating a page from a prior session.
@@ -51,7 +52,7 @@ namespace xkcd_windows_8
             var comic = ComicDataSource.GetComic((int)navigationParameter);
             DefaultViewModel["Items"] = ComicDataSource.AllItems;
             FlipView.SelectedItem = comic;
-
+            
             RegisterForPrinting();
             SearchPane.GetForCurrentView().ShowOnKeyboardInput = true;
             dataTransferManager = DataTransferManager.GetForCurrentView();
@@ -106,7 +107,7 @@ namespace xkcd_windows_8
                 request.FailWithDisplayText("Select a comic you would like to share and try again.");
             }
         }
-
+        
         private void WebsiteOnClick(object sender, RoutedEventArgs e)
         {
             try

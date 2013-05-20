@@ -16,7 +16,127 @@
             x:Name="ItemsViewSource"
             Source="{Binding Items}"/>
 
+        <Style x:Key="SnappedAppBarButtonStyle" TargetType="ButtonBase">
+            <Setter Property="Foreground" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="AutomationProperties.ItemType" Value="App Bar Button"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ButtonBase">
+                        <Grid x:Name="RootGrid" Width="40" Background="Transparent">
+                            <Grid Width="40" Height="40" HorizontalAlignment="Center">
+                                <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0" Foreground="{StaticResource AppBarItemBackgroundThemeBrush}"/>
+                                <TextBlock x:Name="OutlineGlyph" Text="&#xE0A7;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0"/>
+                                <ContentPresenter x:Name="Content" HorizontalAlignment="Center" Margin="-1,-1,0,0" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Rectangle
+                                x:Name="FocusVisualWhite"
+                                IsHitTestVisible="False"
+                                Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
+                                StrokeEndLineCap="Square"
+                                StrokeDashArray="1,1"
+                                Opacity="0"
+                                StrokeDashOffset="1.5"/>
+                            <Rectangle
+                                x:Name="FocusVisualBlack"
+                                IsHitTestVisible="False"
+                                Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
+                                StrokeEndLineCap="Square"
+                                StrokeDashArray="1,1"
+                                Opacity="0"
+                                StrokeDashOffset="0.5"/>
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemPointerOverForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="OutlineGlyph" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemPressedForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="OutlineGlyph" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemDisabledForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemDisabledForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemDisabledForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="FocusVisualWhite"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="1"
+                                                Duration="0"/>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="FocusVisualBlack"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="1"
+                                                Duration="0"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unfocused" />
+                                    <VisualState x:Name="PointerFocused" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualState x:Name="Checked">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" To="0" Storyboard.TargetName="OutlineGlyph" Storyboard.TargetProperty="Opacity"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundCheckedGlyph" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppBarItemPressedForegroundThemeBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unchecked"/>
+                                    <VisualState x:Name="Indeterminate"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="ByDateAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="ByDateAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="By Date"/>
+            <Setter Property="Content" Value="&#xE163;"/>
+        </Style>
+        <Style x:Key="ByDateSnappedAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource SnappedAppBarButtonStyle}">
             <Setter Property="AutomationProperties.AutomationId" Value="ByDateAppBarButton"/>
             <Setter Property="AutomationProperties.Name" Value="By Date"/>
             <Setter Property="Content" Value="&#xE163;"/>
@@ -26,7 +146,17 @@
             <Setter Property="AutomationProperties.Name" Value="Latest"/>
             <Setter Property="Content" Value="&#xE101;"/>
         </Style>
+        <Style x:Key="LatestSnappedAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource SnappedAppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="LatestAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Latest"/>
+            <Setter Property="Content" Value="&#xE101;"/>
+        </Style>
         <Style x:Key="RandomAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="RandomAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Random"/>
+            <Setter Property="Content" Value="&#xE14B;"/>
+        </Style>
+        <Style x:Key="RandomSnappedAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource SnappedAppBarButtonStyle}">
             <Setter Property="AutomationProperties.AutomationId" Value="RandomAppBarButton"/>
             <Setter Property="AutomationProperties.Name" Value="Random"/>
             <Setter Property="Content" Value="&#xE14B;"/>
@@ -36,7 +166,17 @@
             <Setter Property="AutomationProperties.Name" Value="Website"/>
             <Setter Property="Content" Value="&#xE128;"/>
         </Style>
+        <Style x:Key="WebsiteSnappedAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource SnappedAppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="WebsiteAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Website"/>
+            <Setter Property="Content" Value="&#xE128;"/>
+        </Style>
         <Style x:Key="ExplainationAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="ExplainationAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Explaination"/>
+            <Setter Property="Content" Value="&#xE11B;"/>
+        </Style>
+        <Style x:Key="ExplainationSnappedAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource SnappedAppBarButtonStyle}">
             <Setter Property="AutomationProperties.AutomationId" Value="ExplainationAppBarButton"/>
             <Setter Property="AutomationProperties.Name" Value="Explaination"/>
             <Setter Property="Content" Value="&#xE11B;"/>
@@ -112,13 +252,24 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="BackButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=PageRoot}" Style="{StaticResource BackButtonStyle}"/>
             <TextBlock x:Name="PageTitle" Text="{StaticResource AppName}" Style="{StaticResource PageHeaderTextStyle}" Grid.Column="1" IsHitTestVisible="false"/>
-            <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Click="ViewByDate"  Style="{StaticResource ByDateAppBarButtonStyle}"/>
-                <Button Click="ViewLatest"  Style="{StaticResource LatestAppBarButtonStyle}"/>
-                <Button Click="ViewRandom"  Style="{StaticResource RandomAppBarButtonStyle}"/>
-                <Button Click="WebsiteOnClick"  Style="{StaticResource WebsiteAppBarButtonStyle}"/>
-                <Button Click="ExplainationClick"  Style="{StaticResource ExplainationAppBarButtonStyle}"/>
-            </StackPanel>
+            <ListView Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Margin" Value="0"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+
+                <Button x:Name="ByDateButton" Click="ViewByDate"  Style="{StaticResource ByDateAppBarButtonStyle}"/>
+                <Button x:Name="LatestButton" Click="ViewLatest"  Style="{StaticResource LatestAppBarButtonStyle}"/>
+                <Button x:Name="RandomButton" Click="ViewRandom"  Style="{StaticResource RandomAppBarButtonStyle}"/>
+                <Button x:Name="WebsiteButton" Click="WebsiteOnClick"  Style="{StaticResource WebsiteAppBarButtonStyle}"/>
+                <Button x:Name="ExplainationButton" Click="ExplainationClick"  Style="{StaticResource ExplainationAppBarButtonStyle}"/>
+            </ListView>
         </Grid>
 
         <Canvas x:Name="PrintingRoot" Grid.Row="2"/>
@@ -147,6 +298,21 @@
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageTitle" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ByDateButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ByDateSnappedAppBarButtonStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LatestButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource LatestSnappedAppBarButtonStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RandomButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource RandomSnappedAppBarButtonStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="WebsiteButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource WebsiteSnappedAppBarButtonStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ExplainationButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExplainationSnappedAppBarButtonStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
