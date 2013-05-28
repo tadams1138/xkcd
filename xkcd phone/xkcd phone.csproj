@@ -97,6 +97,9 @@
       <DependentUpon>ComicPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\DateToMonthConverter.cs" />
+    <Compile Include="SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DaysPage.xaml.cs">
       <DependentUpon>DaysPage.xaml</DependentUpon>
     </Compile>
@@ -104,12 +107,6 @@
       <DependentUpon>MonthsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalizedStrings.cs" />
-    <Compile Include="DetailsPage.xaml.cs">
-      <DependentUpon>DetailsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="YearsPage.xaml.cs">
       <DependentUpon>YearsPage.xaml</DependentUpon>
     </Compile>
@@ -129,6 +126,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SearchPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DaysPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -136,14 +137,6 @@
     <Page Include="MonthsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DetailsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MainPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="YearsPage.xaml">
       <SubType>Designer</SubType>
@@ -160,7 +153,12 @@
     <Content Include="..\Data\comics.xml">
       <Link>comics.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
+    <Content Include="Assets\appbar.calendar.png" />
+    <Content Include="Assets\appbar.control.fastforward.png" />
+    <Content Include="Assets\appbar.magnify.png" />
+    <Content Include="Assets\appbar.shuffle.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\MediumIcon.png" />
     <Content Include="Assets\SmallIcon.png" />

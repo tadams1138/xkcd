@@ -14,8 +14,7 @@ namespace xkcd_windows_8
     /// </summary>
     public sealed partial class YearsPage
     {
-        private readonly ObservableCollection<int> _years = new ObservableCollection<int>();
-        bool _handleDataEvent;
+        private readonly Collection<int> _years = new Collection<int>();
 
         public YearsPage()
         {
@@ -33,12 +32,6 @@ namespace xkcd_windows_8
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            if (!_handleDataEvent)
-            {
-                ComicDataSource.CollectionChanged += ComicDataSource_CollectionChanged;
-                _handleDataEvent = true;
-            }
-
             RefreshYearsCollection();
 
             DefaultViewModel["Items"] = _years;
@@ -52,11 +45,6 @@ namespace xkcd_windows_8
             {
                 _years.Add(year);
             }
-        }
-
-        private void ComicDataSource_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            RefreshYearsCollection();
         }
 
         void ItemView_ItemClick(object sender, ItemClickEventArgs e)

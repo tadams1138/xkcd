@@ -16,7 +16,7 @@ namespace xkcd_windows_8
     /// </summary>
     public sealed partial class SearchResultsPage
     {
-        private readonly ObservableCollection<Comic> _comics = new ObservableCollection<Comic>();
+        private readonly Collection<Comic> _comics = new Collection<Comic>();
         private string _queryText;
         bool _handleDataEvent;
 
@@ -38,7 +38,6 @@ namespace xkcd_windows_8
         {
             if (!_handleDataEvent)
             {
-                ComicDataSource.CollectionChanged += ComicDataSource_CollectionChanged;
                 SearchPane.GetForCurrentView().QuerySubmitted += OnQuerySubmitted;
                 _handleDataEvent = true;
             }
@@ -65,12 +64,7 @@ namespace xkcd_windows_8
             DefaultViewModel["QueryText"] = '\u201c' + _queryText + '\u201d';
             RefreshCollection();
         }
-
-        private void ComicDataSource_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            RefreshCollection();
-        }
-
+        
         private void RefreshCollection()
         {
             var newCollection = ComicDataSource.GetComics(_queryText);

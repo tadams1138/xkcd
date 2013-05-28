@@ -9,8 +9,7 @@ namespace xkcd_phone
 {
     public partial class YearsPage : PhoneApplicationPage
     {
-        private readonly ObservableCollection<int> _years = new ObservableCollection<int>();
-        bool _handleDataEvent;
+        private readonly Collection<int> _years = new Collection<int>();
 
         // Constructor
         public YearsPage()
@@ -27,12 +26,6 @@ namespace xkcd_phone
         // Load data for the ViewModel Items
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (!_handleDataEvent)
-            {
-                ComicDataSource.CollectionChanged += ComicDataSource_CollectionChanged;
-                _handleDataEvent = true;
-            }
-
             RefreshYearsCollection();
         }
 

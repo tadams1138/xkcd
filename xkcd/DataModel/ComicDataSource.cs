@@ -17,16 +17,14 @@ namespace xkcd.DataModel
         private const string CurrentComicUrl = "http://xkcd.com/info.0.json";
         private const string ComicUrlFormat = "http://xkcd.com/{0}/info.0.json";
 
-        public static event NotifyCollectionChangedEventHandler CollectionChanged;
+        private static readonly ComicDataSource SingleInstanceOfComicDataSource = new ComicDataSource();
+        private static readonly Random RandomNumberGenerator = new Random(DateTime.Now.Millisecond);
 
-        private static readonly ComicDataSource _comicDataSource = new ComicDataSource();
-        private static Random randomNumberGenerator = new Random(DateTime.Now.Millisecond);
+        private readonly ObservableCollection<Comic> _allItems = new ObservableCollection<Comic>();
 
-        private readonly Collection<Comic> _allItems = new Collection<Comic>();
-
-        public static Collection<Comic> AllItems
+        public static ObservableCollection<Comic> AllItems
         {
-            get { return _comicDataSource._allItems; }
+            get { return SingleInstanceOfComicDataSource._allItems; }
         }
 
         public static Comic GetComic(int number)
@@ -35,9 +33,9 @@ namespace xkcd.DataModel
             return matches;
         }
 
-        public static Comic GetRandomComicNumber()
+        public static Comic GetRandomComic()
         {
-            int randomIndex = randomNumberGenerator.Next(0, AllItems.Count - 1);
+            int randomIndex = RandomNumberGenerator.Next(0, AllItems.Count - 1);
             return AllItems[randomIndex];
         }
 

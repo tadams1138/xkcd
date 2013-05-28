@@ -39,7 +39,7 @@ namespace xkcd_windows_8
             InitializeComponent();
             Suspending += OnSuspending;
         }
-
+        
         void OnWindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
         {
             _windowBounds = Window.Current.Bounds;

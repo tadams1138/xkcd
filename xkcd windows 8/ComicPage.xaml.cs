@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Search;
-using Windows.Foundation;
 using Windows.Graphics.Printing;
 using Windows.Storage.Streams;
-using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -24,7 +22,7 @@ namespace xkcd_windows_8
     /// </summary>
     public sealed partial class ComicPage
     {
-        private DataTransferManager dataTransferManager;
+        private DataTransferManager _dataTransferManager;
         private Comic _currentComic;
 
         public ComicPage()
@@ -55,8 +53,8 @@ namespace xkcd_windows_8
             
             RegisterForPrinting();
             SearchPane.GetForCurrentView().ShowOnKeyboardInput = true;
-            dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += OnDataRequested;
+            _dataTransferManager = DataTransferManager.GetForCurrentView();
+            _dataTransferManager.DataRequested += OnDataRequested;
         }
 
         /// <summary>
@@ -71,7 +69,7 @@ namespace xkcd_windows_8
             pageState["SelectedItem"] = selectedItem.Number;
             UnregisterForPrinting();
             SearchPane.GetForCurrentView().ShowOnKeyboardInput = false;
-            this.dataTransferManager.DataRequested -= new TypedEventHandler<DataTransferManager, DataRequestedEventArgs>(this.OnDataRequested);
+            _dataTransferManager.DataRequested -= OnDataRequested;
         }
 
         private void OnDataRequested(DataTransferManager sender, DataRequestedEventArgs e)
@@ -392,7 +390,7 @@ namespace xkcd_windows_8
 
         private void ViewRandom(object sender, RoutedEventArgs e)
         {
-            FlipView.SelectedItem = ComicDataSource.GetRandomComicNumber();
+            FlipView.SelectedItem = ComicDataSource.GetRandomComic();
         }
     }
 }

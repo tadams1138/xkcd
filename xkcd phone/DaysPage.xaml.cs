@@ -8,11 +8,9 @@ namespace xkcd_phone
 {
     public partial class DaysPage
     {
-        private readonly ObservableCollection<Comic> _comics = new ObservableCollection<Comic>();
+        private readonly Collection<Comic> _comics = new Collection<Comic>();
         private DateTime _month;
-        bool _handleDataEvent;
 
-        // Constructor
         public DaysPage()
         {
             InitializeComponent();
@@ -34,12 +32,6 @@ namespace xkcd_phone
                 PageTitle.Text = _month.ToString("MMMM yyyy");
 
                 RefreshCollection();
-                
-                if (!_handleDataEvent)
-                {
-                    ComicDataSource.CollectionChanged += ComicDataSource_CollectionChanged;
-                    _handleDataEvent = true;
-                }
             }
         }
         

@@ -1,5 +1,4 @@
-﻿using Microsoft.Phone.Controls;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -9,9 +8,8 @@ namespace xkcd_phone
 {
     public partial class MonthsPage
     {
-        private readonly ObservableCollection<DateTime> _months = new ObservableCollection<DateTime>();
+        private readonly Collection<DateTime> _months = new Collection<DateTime>();
         private int _year;
-        bool _handleDataEvent;
 
         // Constructor
         public MonthsPage()
@@ -35,12 +33,6 @@ namespace xkcd_phone
                 PageTitle.Text = _year.ToString();
 
                 RefreshCollection();
-                
-                if (!_handleDataEvent)
-                {
-                    ComicDataSource.CollectionChanged += ComicDataSource_CollectionChanged;
-                    _handleDataEvent = true;
-                }
             }
         }
         
@@ -52,11 +44,6 @@ namespace xkcd_phone
             {
                 _months.Add(month);
             }
-        }
-
-        private void ComicDataSource_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            RefreshCollection();
         }
 
         // Handle selection changed on LongListSelector

@@ -14,9 +14,8 @@ namespace xkcd_windows_8
     /// </summary>
     public sealed partial class MonthsPage
     {
-        private readonly ObservableCollection<DateTime> _months = new ObservableCollection<DateTime>();
+        private readonly Collection<DateTime> _months = new Collection<DateTime>();
         private int _year;
-        bool _handleDataEvent;
 
         public MonthsPage()
         {
@@ -35,13 +34,7 @@ namespace xkcd_windows_8
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
             _year = (int)navigationParameter;
-
-            if (!_handleDataEvent)
-            {
-                ComicDataSource.CollectionChanged += ComicDataSource_CollectionChanged;
-                _handleDataEvent = true;
-            }
-
+            
             RefreshCollection();
 
             DefaultViewModel["Items"] = _months;
@@ -56,11 +49,6 @@ namespace xkcd_windows_8
             {
                 _months.Add(month);
             }
-        }
-
-        private void ComicDataSource_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            RefreshCollection();
         }
 
         void ItemView_ItemClick(object sender, ItemClickEventArgs e)
