@@ -61,6 +61,7 @@
                 <shell:ApplicationBarMenuItem Text="Email Link" Click="EmailLinkClick" />
                 <shell:ApplicationBarMenuItem Text="Text Link" Click="TextLinkClick" />
                 <shell:ApplicationBarMenuItem Text="Rate &amp; Review" Click="RateAndReviewClick" />
+                <shell:ApplicationBarMenuItem Text="Privacy Policy" Click="PrivacyClick" />
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

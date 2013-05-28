@@ -134,5 +134,11 @@ namespace xkcd_phone
         {
             NavigationService.Navigate(new Uri("/SearchPage.xaml", UriKind.Relative));
         }
+
+        private void PrivacyClick(object sender, EventArgs e)
+        {
+            var webBrowserTask = new WebBrowserTask { Uri = new Uri("http://tadams1138.blogspot.com/p/xkcd-the.html") };
+            webBrowserTask.Show();
+        }
     }
 }
