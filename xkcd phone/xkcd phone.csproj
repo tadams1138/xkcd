@@ -148,6 +148,8 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="xkcd_phone_2013_05_28_00_29_12.sap" />
+    <None Include="xkcd_phone_2013_05_28_00_47_54.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Data\comics.xml">
