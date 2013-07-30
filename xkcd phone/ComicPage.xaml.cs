@@ -83,7 +83,7 @@ namespace xkcd_phone
             webBrowserTask.Show();
         }
 
-        private void ExplainationClick(object sender, EventArgs e)
+        private void ExplanationClick(object sender, EventArgs e)
         {
             var selected = (Comic)SlideView.SelectedItem;
             var webBrowserTask = new WebBrowserTask { Uri = selected.ExplanationUri };

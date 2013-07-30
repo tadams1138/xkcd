@@ -171,14 +171,14 @@
             <Setter Property="AutomationProperties.Name" Value="Website"/>
             <Setter Property="Content" Value="&#xE128;"/>
         </Style>
-        <Style x:Key="ExplainationAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
-            <Setter Property="AutomationProperties.AutomationId" Value="ExplainationAppBarButton"/>
-            <Setter Property="AutomationProperties.Name" Value="Explaination"/>
+        <Style x:Key="ExplanationAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="ExplanationAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Explanation"/>
             <Setter Property="Content" Value="&#xE11B;"/>
         </Style>
-        <Style x:Key="ExplainationSnappedAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource SnappedAppBarButtonStyle}">
-            <Setter Property="AutomationProperties.AutomationId" Value="ExplainationAppBarButton"/>
-            <Setter Property="AutomationProperties.Name" Value="Explaination"/>
+        <Style x:Key="ExplanationSnappedAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource SnappedAppBarButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="ExplanationAppBarButton"/>
+            <Setter Property="AutomationProperties.Name" Value="Explanation"/>
             <Setter Property="Content" Value="&#xE11B;"/>
         </Style>
     </Page.Resources>
@@ -268,7 +268,7 @@
                 <Button x:Name="LatestButton" Click="ViewLatest"  Style="{StaticResource LatestAppBarButtonStyle}"/>
                 <Button x:Name="RandomButton" Click="ViewRandom"  Style="{StaticResource RandomAppBarButtonStyle}"/>
                 <Button x:Name="WebsiteButton" Click="WebsiteOnClick"  Style="{StaticResource WebsiteAppBarButtonStyle}"/>
-                <Button x:Name="ExplainationButton" Click="ExplainationClick"  Style="{StaticResource ExplainationAppBarButtonStyle}"/>
+                <Button x:Name="ExplanationButton" Click="ExplanationClick"  Style="{StaticResource ExplanationAppBarButtonStyle}"/>
             </ListView>
         </Grid>
 
@@ -311,8 +311,8 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="WebsiteButton" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource WebsiteSnappedAppBarButtonStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ExplainationButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExplainationSnappedAppBarButtonStyle}"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ExplanationButton" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ExplanationSnappedAppBarButtonStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>

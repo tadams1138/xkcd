@@ -120,7 +120,7 @@ namespace xkcd_windows_8
             }
         }
 
-        private void ExplainationClick(object sender, RoutedEventArgs e)
+        private void ExplanationClick(object sender, RoutedEventArgs e)
         {
             try
             {

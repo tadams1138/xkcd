@@ -56,7 +56,7 @@
 
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="Go to Website" Click="WebsiteClick" />
-                <shell:ApplicationBarMenuItem Text="Explaination" Click="ExplainationClick" />
+                <shell:ApplicationBarMenuItem Text="Explanation" Click="ExplanationClick" />
                 <shell:ApplicationBarMenuItem Text="Share Link" Click="ShareLinkClick" />
                 <shell:ApplicationBarMenuItem Text="Email Link" Click="EmailLinkClick" />
                 <shell:ApplicationBarMenuItem Text="Text Link" Click="TextLinkClick" />
