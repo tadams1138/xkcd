@@ -8,6 +8,10 @@ namespace xkcd_phone
 {
     public partial class ComicPage
     {
+        // TODO: fix zoom for large pics
+        // TODO: research crashes
+        // TODO: live tile to know when new comics are available
+
         private const string NumberKey = "number";
         private int _currentComicNumber;
 
