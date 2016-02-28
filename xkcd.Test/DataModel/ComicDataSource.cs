@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace xkcd.Test.DataModel
 {
@@ -9,18 +10,17 @@ namespace xkcd.Test.DataModel
         const string ComicsDataFile = @"C:\Users\Thomas\Source\Repos\xkcd\Data\comics.xml";
 
         // This is an integration test/tool to update the comics.xml file to the latest json on the web
-        //[Ignore]
+        [Ignore]
         [TestMethod]
-        public void RefreshComicsDataFile()
+        public async Task RefreshComicsDataFile()
         {
             using (var readStream = LoadComicsDataFile())
             {
                 xkcd.DataModel.ComicDataSource.LoadDataFromFile(readStream);
             }
 
-            var task = xkcd.DataModel.ComicDataSource.UpdateComicData();
-            task.Wait();
-
+            await xkcd.DataModel.ComicDataSource.UpdateComicData();
+            
             using (var saveStream = GetSaveStream())
             {
                 xkcd.DataModel.ComicDataSource.SaveComicData(saveStream);

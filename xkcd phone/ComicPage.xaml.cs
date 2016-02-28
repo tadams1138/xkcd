@@ -18,7 +18,7 @@ namespace xkcd_phone
         public ComicPage()
         {
             InitializeComponent();
-            DataContext = ComicDataSource.AllItems;
+            DataContext = new Comic();
         }
 
         // Load data for the ViewModel Items
@@ -44,7 +44,7 @@ namespace xkcd_phone
                 _currentComicNumber = comic.Number;
             }
 
-            SlideView.SelectedItem = comic;
+            DataContext = comic;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -59,15 +59,15 @@ namespace xkcd_phone
             }
         }
 
-        private void PanAndZoomImage_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void Image_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            var selectedComic = (Comic)SlideView.SelectedItem;
+            var selectedComic = (Comic)DataContext;
             MessageBox.Show(selectedComic.AltText);
         }
 
         private void RandomClick(object sender, EventArgs e)
         {
-            SlideView.SelectedItem = ComicDataSource.GetRandomComic();
+            DataContext = ComicDataSource.GetRandomComic();
         }
 
         private void ByDateClick(object sender, EventArgs e)
@@ -77,19 +77,19 @@ namespace xkcd_phone
 
         private void LatestClick(object sender, EventArgs e)
         {
-            SlideView.SelectedItem = ComicDataSource.GetLatestComic();
+            DataContext = ComicDataSource.GetLatestComic();
         }
 
         private void WebsiteClick(object sender, EventArgs e)
         {
-            var selected = (Comic)SlideView.SelectedItem;
+            var selected = (Comic)DataContext;
             var webBrowserTask = new WebBrowserTask { Uri = selected.Uri };
             webBrowserTask.Show();
         }
 
         private void ExplanationClick(object sender, EventArgs e)
         {
-            var selected = (Comic)SlideView.SelectedItem;
+            var selected = (Comic)DataContext;
             var webBrowserTask = new WebBrowserTask { Uri = selected.ExplanationUri };
             webBrowserTask.Show();
         }
@@ -102,14 +102,14 @@ namespace xkcd_phone
 
         private void ShareLinkClick(object sender, EventArgs e)
         {
-            var selected = (Comic)SlideView.SelectedItem;
+            var selected = (Comic)DataContext;
             var shareLinkTask = new ShareLinkTask {Title = "xkcd", LinkUri = selected.Uri, Message = selected.Title};
             shareLinkTask.Show();
         }
 
         private void EmailLinkClick(object sender, EventArgs e)
         {
-            var selected = (Comic)SlideView.SelectedItem;
+            var selected = (Comic)DataContext;
             var emailComposeTask = new EmailComposeTask
                 {
                     Subject = "xkcd - " + selected.Title,
@@ -120,7 +120,7 @@ namespace xkcd_phone
 
         private void TextLinkClick(object sender, EventArgs e)
         {
-            var selected = (Comic)SlideView.SelectedItem;
+            var selected = (Comic)DataContext;
             var smsComposeTask = new SmsComposeTask
                 {
                     Body = "xkcd - " + selected.Title + Environment.NewLine + selected.Uri
@@ -130,7 +130,7 @@ namespace xkcd_phone
 
         private void SlideView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            var selected = (Comic)SlideView.SelectedItem;
+            var selected = (Comic)DataContext;
             _currentComicNumber = selected.Number;
         }
 

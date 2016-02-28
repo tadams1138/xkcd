@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -86,7 +85,7 @@ namespace xkcd.DataModel
         public static async Task UpdateComicData()
         {
             int latestComicNumberInDataSource = GetNumberOfLatestComic();
-            Comic latestComic = await GetComicFromWeb(CurrentComicUrl);
+            Comic latestComic = await GetComicFromWeb(CurrentComicUrl).ConfigureAwait(false);
 
             if (latestComic._num > latestComicNumberInDataSource)
             {
@@ -131,7 +130,7 @@ namespace xkcd.DataModel
                 try
                 {
                     string comicUrl = string.Format(ComicUrlFormat, i);
-                    Comic comic = await GetComicFromWeb(comicUrl);
+                    Comic comic = await GetComicFromWeb(comicUrl).ConfigureAwait(false);
                     AllItems.Add(comic);
                 }
                 catch (Exception ex)
